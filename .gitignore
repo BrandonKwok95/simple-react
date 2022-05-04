@@ -1,0 +1,10 @@
+typings
+dist/
+.temp/
+.cache/
+node_modules/
+.DS_Store
+yarn-error.log
+yarn.lock
+.idea
+.vscode
