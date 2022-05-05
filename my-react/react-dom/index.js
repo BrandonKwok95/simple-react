@@ -2,7 +2,7 @@
  * @Author: guohao043
  * @Date: 2022-05-03 23:55:22
  * @LastEditors: guohao043
- * @LastEditTime: 2022-05-04 16:43:35
+ * @LastEditTime: 2022-05-04 23:44:12
  * @Description: desc
  */
 import Component from "../react/component";
@@ -14,11 +14,9 @@ const ReactDOM = {
 
 
 function render(vnode, container, dom) {
-  console.log(vnode)
   // 这种情况下，默认都会重新挂载新DOM，因此需要引入DIFF算法
-  // const temp = diff(dom, vnode, container)
-  // return container.appendChild(temp)
-  return container.appendChild(_render(vnode))
+  return diff(dom, vnode, container)
+  // return container.appendChild(_render(vnode))
 }
 
 /*
@@ -91,8 +89,9 @@ export function setComponentProps(comp, props) {
 /*
 * 将组件comp转换成JSX对象，将JSX转换成真实DOM并挂载到comp上
 * */
-function renderComponent(comp) {
+export function renderComponent(comp) {
   const compToJsx = comp.render()
+  let base = diffNode(comp.base, compToJsx)
   // 组件已经渲染则执行componentWillUpdate
   comp.base && comp.componentWillUpdate && comp.componentWillUpdate()
   if (comp.base) {
@@ -101,15 +100,9 @@ function renderComponent(comp) {
   } else {
     comp.componentDidMount && comp.componentDidMount()
   }
-  // comp.base已经存在且已经挂载，则认定为setState更新模式
-  const base = _render(compToJsx)
-  if (comp.base && comp.base.parentNode) {
-    // 重新挂载节点
-    comp.base.parentNode.replaceChild(base, comp.base)  //replaceChild(new, old)
-  }
   comp.base = base
-  // const base = diffNode(comp.base, compToJsx)
 }
+
 
 /*
 * 处理相应属性（class和事件处理）
@@ -142,7 +135,7 @@ export function setAttribute(dom, key, value) {
   } else {
     // 其他属性
     if (key in dom) {
-      dom[key] = value
+      dom[key] = value || ''
     }
     if (value) {
       dom.setAttribute(key, value)

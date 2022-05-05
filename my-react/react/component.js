@@ -2,13 +2,13 @@
  * @Author: guohao043
  * @Date: 2022-05-04 10:17:07
  * @LastEditors: guohao043
- * @LastEditTime: 2022-05-04 10:34:00
+ * @LastEditTime: 2022-05-04 22:22:32
  * @Description: desc
  */
 import { renderComponent } from "../react-dom";
 
 export default class Component {
-  constructor(props) {
+  constructor(props = {}) {
     this.props = props
     this.state = {}
   }
